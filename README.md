@@ -1,73 +1,76 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Image Compressor Api
+> Esse projeto foi desenvolvido para um desafio técnico. Seu objetivo é manipular imagens a partir de uma url pública,
+> salvando no sistema de arquivos tanto a imagem original quanto uma versão compactada com base em uma taxa de compressão
+> fornecida pelo usuário.
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Como utilizar
+1. Clone esse reposítório em sua máquina:
+~~~bash
+git clone https://github.com/vanriwerson/image-compressor-api.git
+~~~
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+2. Navegue para o diretório raiz do projeto e instale as dependências:
+~~~bash
+cd image-compressor-api && npm install
+~~~
 
-## Description
+3. Prepare as variáveis de ambiente de acordo com o arquivo de exemplo `.env.example`:
+~~~bash
+API_PORT=3000
+MONGODB_URL=mongodb://localhost:27017
+~~~
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+##### ⚠️ Esse projeto utiliza o Docker para criar uma instâcia do MongoDB. ⚠️
 
-## Installation
+4. Inicie o banco de dados:
+~~~bash
+docker-compose up
+~~~
+5. Inicie a api (Ela rodará na porta indica pelo arquivo .env):
+~~~bash
+npm start
+~~~
 
-```bash
-$ npm install
-```
+### 6. Envie uma requisição:
+- A requisição deve utilizar o método POST;
+- Ela deve ser feita ao endpoint `{BASE_URL}/image/save`, passando no body a url da imagem desejada e o fator de compressão da imagem:
+~~~bash
+{
+  "image": "https://assets.storage.trakto.io/AkpvCuxXGMf3npYXajyEZ8A2APn2/0e406885-9d03-4c72-bd92-c6411fbe5c49.jpeg",
+  "compress": 0.7
+}
+~~~
+- Ao enviar dados válidos, a aplicação irá salvar as imagens no sistema de arquivos e retornará uma resposta parecida com a seguinte:
+~~~bash
+{
+  "localpath": {
+      "original": "/path/to/original.jpg",
+      "thumb": "/path/to/thumb.jpg",
+  },
+  "metadata": {
+      "EXIF_KEY_DATA": "metadata.exif has lots of data O.O"
+  }
+}
+~~~
 
-## Running the app
+## Tecnologias utilizadas
 
-```bash
-# development
-$ npm run start
+##### [NestJS](https://nestjs.com/)
+Foi o framework Node.js escolhido pela empresa para esse desafio.
 
-# watch mode
-$ npm run start:dev
+##### [MongoDB](https://www.mongodb.com/)
+Foi o banco de dados escolhido pela empresa para esse desafio.
 
-# production mode
-$ npm run start:prod
-```
+##### [Mongoose](https://mongoosejs.com/)
+Optei por utilizar um ODM para facilitar a implementação desse projeto.
 
-## Test
+##### [Docker](https://docs.docker.com/compose/)
+Essa aplicação utiliza o Docker para gerar uma instância do banco de dados e salvar as imagens no sistema de arquivos.
 
-```bash
-# unit tests
-$ npm run test
+##### [Axios](https://www.npmjs.com/package/axios#package-manager)
+No contexto dessa aplicação, foi utilizado para fazer o download de imagens através de sua url.
 
-# e2e tests
-$ npm run test:e2e
+##### [Sharp](https://www.npmjs.com/package/sharp)
+No contaxto dessa aplicação, foi utilizado para fazer o download de imagens através de sua url.
 
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+Developer: [Bruno Riwerson Silva](https://www.linkedin.com/in/bruno-riwerson/)
