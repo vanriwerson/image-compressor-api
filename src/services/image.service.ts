@@ -55,7 +55,7 @@ export class ImagesService {
       const createdImage = new this.imageModel({
         originalPath,
         thumbPath,
-        metadata,
+        metadata: metadata.exif,
       });
 
       return createdImage.save();
